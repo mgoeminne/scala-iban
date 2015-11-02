@@ -18,4 +18,19 @@ case class BBANBelgium(account: String) extends BBAN("BE")
       Some(account.forall(_.isDigit) &&
            (BigInt(account.dropRight(2)) mod 97).toInt == account.takeRight(2).toInt)
    }
+
+   /**
+    * @return a 3-digit code representing the bank responsible of the BBAN.
+    */
+   def bankCode(): String = account take 3
+
+   /**
+    * @return a 7-digit code representing the bank account number.
+    */
+   def bankAccount(): String = account.drop(3).take(7)
+
+   /**
+    * @return a 2-digit code representing the checking key
+    */
+   def key(): String = account takeRight 2
 }
