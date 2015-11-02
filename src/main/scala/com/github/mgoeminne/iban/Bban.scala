@@ -7,7 +7,7 @@ import com.github.mgoeminne.iban
 /**
  * A representation of a basic bank account number.
  */
-case abstract class Bban(countryCode: String)
+abstract class BBAN(val countryCode: String)
 {
    /**
     * @return A compact, digital representation of the BBAN.

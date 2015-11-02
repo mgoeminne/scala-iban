@@ -3,7 +3,7 @@ package com.github.mgoeminne.iban
 /**
  * A BBAN for a belgian account.
  */
-case class BbanBelgium(account: String) extends Bban("BE")
+case class BBANBelgium(account: String) extends BBAN("BE")
 {
    override def digital: String = account
 
