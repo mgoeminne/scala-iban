@@ -3,10 +3,8 @@ package com.github.mgoeminne.iban
 /**
  * A BBAN for a belgian account.
  */
-case class BBANBelgium(account: String) extends BBAN("BE")
+class BBANBelgium(number: String) extends BBAN(number.replaceAll("""[^\d]""", ""), "BE")
 {
-   override def digital: String = account
-
    override def toString = account.take(3) + "-" + account.drop(3).take(7) + "-" + account.takeRight(2)
 
    /**

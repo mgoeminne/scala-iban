@@ -11,11 +11,11 @@ class BBANBelgiumTest extends FlatSpec with Matchers with Inspectors
                         "539007547034")
 
    "All valid BBAN" should "pass the validation test" in {
-      forAll(validBBANs){ x => BBANBelgium(x).isValid shouldBe Some(true) }
+      forAll(validBBANs){ x => new BBANBelgium(x).isValid shouldBe Some(true) }
    }
 
    it should "produce correct string representation" in {
-      validBBANs.map(BBANBelgium(_).toString) shouldEqual(
+      validBBANs.map(new BBANBelgium(_).toString) shouldEqual(
          Seq("068-2492526-41",
              "310-1269855-17",
              "539-0075470-34")
