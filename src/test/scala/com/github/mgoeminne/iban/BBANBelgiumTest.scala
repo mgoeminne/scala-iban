@@ -7,8 +7,8 @@ import org.scalatest.{Inspectors, Matchers, FlatSpec}
  */
 class BBANBelgiumTest extends FlatSpec with Matchers with Inspectors
 {
-   val validBBANs = Seq("068249252641", "310126985517",
-                        "539007547034")
+   val validBBANs = Seq("068-2492526-41", "310-1269855-17",
+                        "539-0075470-34")
 
    val invalidBBANs = Seq("844-0103701-34")
 
@@ -17,11 +17,7 @@ class BBANBelgiumTest extends FlatSpec with Matchers with Inspectors
    }
 
    it should "produce correct string representation" in {
-      validBBANs.map(new BBANBelgium(_).toString) shouldEqual(
-         Seq("068-2492526-41",
-             "310-1269855-17",
-             "539-0075470-34")
-      )
+      forAll(invalidBBANs){x => new BBANBelgium(x).toString shouldBe x}
    }
 
    "All invalid BBAN" should "not pass the validation test" in {
