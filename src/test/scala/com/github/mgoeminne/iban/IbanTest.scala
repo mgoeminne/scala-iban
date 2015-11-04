@@ -2,12 +2,16 @@ package com.github.mgoeminne.iban
 
 import java.util.Locale
 
-import org.scalatest.{Matchers, FlatSpec}
+import org.scalatest.{Inspectors, Matchers, FlatSpec}
 
-class IbanTest extends FlatSpec with Matchers {
+import scala.io.Source
+
+class IbanTest extends FlatSpec with Matchers with Inspectors {
 
    val lampiris = Iban(new Locale("fr", "BE"), 38, "001509424272")
    val greekBank = Iban(new Locale("gr", "GR"), 3, "01108950000089529800453")
+
+   val validAccounts = Source.fromURL(getClass.getResource("/valid_iban.txt")).getLines().toSeq.map(_.trim)
 
    "The Lampiris IBAN account" should "have a correct digital representation" in {
        lampiris.digital should be ("BE38001509424272")
@@ -46,6 +50,19 @@ class IbanTest extends FlatSpec with Matchers {
       Iban("GR0301108950000089529800453").get should equal (greekBank)
       Iban("GR03 0110 8950 0000 8952 9800 453") should be a 'defined
       Iban("GR03 0110 8950 0000 8952 9800 453").get should equal (greekBank)
+   }
+
+
+   "valid IBAN accounts" should "be accepted as IBAN account" in {
+       forAll(validAccounts){x => Iban(x) should be ('defined)}
+   }
+
+   it should "be considered as valid IBAN account" in {
+      forAll(validAccounts){x => Iban(x).get should be ('valid)}
+   }
+
+   it should "have a textual representation that matches the given texts" in {
+      forAll(validAccounts){x => Iban(x).get.toString should equal (x)}
    }
 
 }
