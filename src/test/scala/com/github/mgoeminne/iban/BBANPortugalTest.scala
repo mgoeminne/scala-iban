@@ -11,14 +11,19 @@ class BBANPortugalTest extends FlatSpec with Matchers with Inspectors
                         "0035 0683 00000007843 11"
    )
 
+   val invalidBBANs = Seq("0781 0112 00000007843 10")
+
    "All valid BBAN" should "pass the validation test" in {
       forAll(validBBANs){ x =>
-         println(new BBANPortugal(x))
          new BBANPortugal(x).isValid shouldBe Some(true)
       }
    }
 
    it should "produce correct string representation" in {
       validBBANs.map(new BBANPortugal(_).toString) shouldEqual validBBANs
+   }
+
+   "All invalid BBAN" should "not pass the validation test" in {
+      forAll(invalidBBANs){ x=> new BBANPortugal(x).isValid shouldBe Some(false)}
    }
 }
