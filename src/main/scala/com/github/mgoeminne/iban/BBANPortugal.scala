@@ -1,7 +1,7 @@
 package com.github.mgoeminne.iban
 
 /**
- * A Portugese BBAN.
+ * A Portuguese BBAN.
  */
 class BBANPortugal(number: String) extends BBAN(number.replaceAll("""[^\d\w]""", ""), "PT")
 {
@@ -11,21 +11,12 @@ class BBANPortugal(number: String) extends BBAN(number.replaceAll("""[^\d\w]""",
     */
    override def isValid: Option[Boolean] =
    {
-      def convert(char: Char): Int = {
-         val c = char.toUpper
+      val toValidate = account.take(19).map(_.asDigit)
+      val wi = Array(73, 17, 89, 38, 62, 45, 53, 15, 50, 5, 49, 34, 81, 76, 27, 90, 9, 30, 3);
+      val z = toValidate zip wi
 
-         if(c >= '0' && c <= '9') return c.asDigit
-         if(c >= 'A' && c <= 'I') return c.asDigit - 'A'.asDigit + 1
-         if(c >= 'J' && c <= 'R') return c.asDigit - 'J'.asDigit + 1
-         return c.asDigit - 'S'.asDigit + 2
-      }
-
-      val b = BigInt(bankCode.map(c => (convert(c) + '0').toChar))
-      val s = BigInt(sortCode.map(c => (convert(c) + '0').toChar))
-      val a = BigInt(bankAccount.map(c => (convert(c) + '0').toChar))
-      val k = BigInt(key.map(c => (convert(c) + '0').toChar))
-
-      return Some((b*89 + s*15 + a*3 + k) % 97 == 0)
+      val sum = z.foldLeft(0)((sum, e) => sum + e._1 * e._2)
+      return Some(key.toInt == 98 - (sum % 97))
    }
 
    /**
